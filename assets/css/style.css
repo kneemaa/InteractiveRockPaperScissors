@@ -1,0 +1,7 @@
+.player1, .player2 {
+	border-width: 3px;
+	border: solid;
+}
+.title {
+	align-content: center;
+}
