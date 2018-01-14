@@ -1,7 +1,32 @@
-.player1, .player2 {
+.player1, .player2, .screen {
+	top: 50px;
 	border-width: 3px;
 	border: solid;
+	height: 300px;
 }
 .title {
 	align-content: center;
+}
+.pickZone {
+	font-size: 30px;
+	text-align: center;
+
+}
+
+.prompt {
+	position: relative;
+	font-size: 30px;
+	text-align: center;
+	top: 40%;
+}
+
+.pickZone .playerTwo, .pickZone .playerOne {
+	font-size: 20px;
+	padding-top: 50px;
+}
+
+#winLoss {
+	position: relative;
+	top: 5px;
+	font-size: 20px;
 }
