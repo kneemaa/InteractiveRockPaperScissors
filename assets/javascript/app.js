@@ -41,14 +41,14 @@ db.ref("players").on("value", function(snapshot){
 
 	if (thisPlayerNumber === "One"){
 
-		$(".player2").html("Waiting on Player 2");
+		$(".player2").html("Waiting on " + playerTwo.name);
 		$(".player1").html(playerOne.name + "<span id='winLoss'></br>Wins: " + playerOne.wins + " | Losses: " + playerOne.losses + "</span>");
 		var buildOptions = buildChoices(thisPlayerNumber);
 		$(".player1").append(buildOptions);
 
 	} else if (thisPlayerNumber === "Two"){
 
-		$(".player1").html("Waiting on Player 1");
+		$(".player1").html("Waiting on " + playerOne.name);
 		$(".player2").html(playerTwo.name + "<span id='winLoss'></br>Wins: " + playerTwo.wins + " | Losses: " + playerTwo.losses + "</span>");
 		var buildOptions = buildChoices(thisPlayerNumber);
 		$(".player2").append(buildOptions);
@@ -95,7 +95,7 @@ db.ref("players").on("value", function(snapshot){
 		//var p2Pick = snapshot.child("Two/choice").val();
 		
 		if (playerOnePick === playerTwoPick){
-			console.log("tie");
+			tie();
 		} else if (playerOnePick === "Scissors" && playerTwoPick === "Paper"){
 			playerOneWin();
 		} else if (playerOnePick === "Rock" && playerTwoPick === "Scissors" ) {
@@ -110,16 +110,20 @@ db.ref("players").on("value", function(snapshot){
 			playerTwoWin();
 		}
 
-		
-
-		//playerOnePick = snapshot.child("One/choice").val();
-		//playerTwoPick = snapshot.child("Two/choice").val();
 	}
-	
+
+	function tie(){
+		var p1Pick = snapshot.child("One/choice").val();
+		$(".prompt").html(" Tie!<br>You Both Chose "+ p1Pick);
+		setTimeout(makeAPick, 1000 * 2);
+	}
+
 	function playerOneWin() {
 		playerOne.wins++;
-
-		console.log("****"+ playerOne.wins, playerTwo.losses);
+		var p1Pick = snapshot.child("One/choice").val();
+		var p2Pick = snapshot.child("Two/choice").val();
+		$(".prompt").html(playerOne.name + " Wins!<br>"+ p1Pick +" beats " + p2Pick);
+		setTimeout(makeAPick, 1000 * 2);
 		var pp = snapshot.val();
 		if (playerOne.wins !== pp.One.wins){
 			db.ref("players/One").update(playerOne);
@@ -129,6 +133,7 @@ db.ref("players").on("value", function(snapshot){
 	};
 	function playerTwoLoss(){
 		playerTwo.losses++;
+
 		var pp = snapshot.val();
 		if (playerTwo.losses !== pp.Two.losses){
 			db.ref("players/Two").update(playerTwo);
@@ -137,6 +142,10 @@ db.ref("players").on("value", function(snapshot){
 
 	function playerTwoWin(){
 		playerTwo.wins++;
+		var p1Pick = snapshot.child("One/choice").val();
+		var p2Pick = snapshot.child("Two/choice").val();
+		$(".prompt").html(playerTwo.name + " Wins!<br>"+ p2Pick +" beats " + p1Pick);
+		setTimeout(makeAPick, 1000 * 2);
 		var pp = snapshot.val();
 		if (playerTwo.wins !== pp.Two.wins) {
 			db.ref("players/Two").update(playerTwo);	
@@ -168,13 +177,16 @@ function buildChoices(playerNumber){
 	return output;
 };
 
-
+function makeAPick(){
+	$(".prompt").html("Make a Pick.");
+};
 
 $("#submitName").on("click",function(event){
 	event.preventDefault();
 
 	localPlayerName = $("#name").val().trim();
 	if (!playerOne.name) {
+		makeAPick();
 		thisPlayerNumber = "One";
 		db.ref("players").update({
 			One: {
@@ -185,6 +197,7 @@ $("#submitName").on("click",function(event){
 		})
 	} else if (!playerTwo.name && playerOne.name) {
 		thisPlayerNumber = "Two";
+		makeAPick();
 		db.ref("players").update({
 			Two: {
 				name: localPlayerName,
