@@ -29,26 +29,30 @@ db.ref("players").on("value", function(snapshot){
 
 	if (playerOneExists){
 		playerOne = snapshot.child("One").val();
-/*		console.log(playerOne);
-		console.log("1111111");*/
 	}
 
 	if (playerTwoExists){
 		playerTwo = snapshot.child("Two").val();
-/*		console.log(playerTwo);
-		console.log("2222222");*/
+
 	}
 
 	if (thisPlayerNumber === "One"){
-
-		$(".player2").html("Waiting on " + playerTwo.name);
+		console.log(!playerTwo.name);
+		if (!playerTwo.name) {
+			$(".player2").html("Waiting on Player 2");
+		} else {
+			$(".player2").html("Waiting on " + playerTwo.name);
+		}	
 		$(".player1").html(playerOne.name + "<span id='winLoss'></br>Wins: " + playerOne.wins + " | Losses: " + playerOne.losses + "</span>");
 		var buildOptions = buildChoices(thisPlayerNumber);
 		$(".player1").append(buildOptions);
 
 	} else if (thisPlayerNumber === "Two"){
-
-		$(".player1").html("Waiting on " + playerOne.name);
+		if (!playerOne.name) {
+			$(".player2").html("Waiting on Player 1");
+		} else {
+			$(".player2").html("Waiting on " + playerOne.name);
+		}	
 		$(".player2").html(playerTwo.name + "<span id='winLoss'></br>Wins: " + playerTwo.wins + " | Losses: " + playerTwo.losses + "</span>");
 		var buildOptions = buildChoices(thisPlayerNumber);
 		$(".player2").append(buildOptions);
