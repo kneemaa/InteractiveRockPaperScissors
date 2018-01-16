@@ -37,7 +37,6 @@ db.ref("players").on("value", function(snapshot){
 	}
 
 	if (thisPlayerNumber === "One"){
-		console.log(!playerTwo.name);
 		if (!playerTwo.name) {
 			$(".player2").html("Waiting on Player 2");
 		} else {
@@ -64,7 +63,6 @@ db.ref("players").on("value", function(snapshot){
 		var playerId = "#player"+thisPlayerNumber;
 		$(".pickZone").on("click", playerClass, function(){
 			var theChoiceOne = $(this).attr("attr");
-			console.log(theChoiceOne);
 			db.ref("players/"+thisPlayerNumber).update({
 				choice: theChoiceOne
 			})
@@ -77,7 +75,6 @@ db.ref("players").on("value", function(snapshot){
 		var playerId = "#player"+thisPlayerNumber;
 		$(".pickZone").on("click", playerClass, function(){
 			var theChoiceTwo = $(this).attr("attr");
-			console.log(theChoiceTwo);
 			db.ref("players/"+thisPlayerNumber).update({
 				choice: theChoiceTwo
 			})
@@ -91,7 +88,6 @@ db.ref("players").on("value", function(snapshot){
 
 
 	if (playerOneChoice && playerTwoChoice) {
-		console.log("repeat");
 
 		db.ref("players/One").child("choice").remove();
 		db.ref("players/Two").child("choice").remove();
